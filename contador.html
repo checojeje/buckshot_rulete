@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contador de Balas con Probabilidades</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .bullet-counter {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .bullet-display {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .red-bullet {
+            background-color: #ff4444;
+        }
+
+        .blue-bullet {
+            background-color: #4444ff;
+        }
+
+        button {
+            font-size: 18px;
+            margin: 5px;
+            padding: 5px 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #ddd;
+        }
+
+        button:hover {
+            background-color: #ccc;
+        }
+
+        .total, .probability {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .probability {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .probability-box {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            flex: 1;
+            margin: 0 5px;
+        }
+
+        .probability-red {
+            background-color: rgba(255, 68, 68, 0.2);
+        }
+
+        .probability-blue {
+            background-color: rgba(68, 68, 255, 0.2);
+        }
+
+        .big-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contador de Balas</h1>
+        
+        <div class="bullet-counter">
+            <h2>Balas Rojas</h2>
+            <div class="bullet-display red-bullet" id="redCount">0</div>
+            <button onclick="changeBullet('red', -1)">-</button>
+            <button onclick="changeBullet('red', 1)">+</button>
+        </div>
+
+        <div class="bullet-counter">
+            <h2>Balas Azules</h2>
+            <div class="bullet-display blue-bullet" id="blueCount">0</div>
+            <button onclick="changeBullet('blue', -1)">-</button>
+            <button onclick="changeBullet('blue', 1)">+</button>
+        </div>
+
+        <div class="total">
+            <h2>Total de Balas: <span id="totalCount">0</span></h2>
+        </div>
+
+        <div class="probability">
+            <div class="probability-box probability-red">
+                <h3>Probabilidad Bala Roja</h3>
+                <div class="big-text" id="redProb">0%</div>
+            </div>
+            <div class="probability-box probability-blue">
+                <h3>Probabilidad Bala Azul</h3>
+                <div class="big-text" id="blueProb">0%</div>
+            </div>
+        </div>
+
+        <button onclick="simularSiguienteBala()" style="display: block; margin: 20px auto; padding: 10px 20px; background-color: #4CAF50; color: white;">
+            Simular Siguiente Bala
+        </button>
+    </div>
+
+    <script>
+        let redBullets = 0;
+        let blueBullets = 0;
+
+        function updateDisplays() {
+            document.getElementById('redCount').textContent = redBullets;
+            document.getElementById('blueCount').textContent = blueBullets;
+            document.getElementById('totalCount').textContent = redBullets + blueBullets;
+            
+            // Actualizar probabilidades
+            const total = redBullets + blueBullets;
+            if (total > 0) {
+                const redProb = (redBullets / total * 100).toFixed(1);
+                const blueProb = (blueBullets / total * 100).toFixed(1);
+                document.getElementById('redProb').textContent = redProb + '%';
+                document.getElementById('blueProb').textContent = blueProb + '%';
+            } else {
+                document.getElementById('redProb').textContent = '0%';
+                document.getElementById('blueProb').textContent = '0%';
+            }
+        }
+
+        function changeBullet(color, amount) {
+            if (color === 'red') {
+                redBullets = Math.max(0, redBullets + amount);
+            } else {
+                blueBullets = Math.max(0, blueBullets + amount);
+            }
+            updateDisplays();
+        }
+
+        function simularSiguienteBala() {
+            const total = redBullets + blueBullets;
+            if (total <= 0) {
+                alert('No hay balas para simular!');
+                return;
+            }
+
+            const random = Math.random() * total;
+            let resultado;
+            
+            if (random < redBullets) {
+                resultado = 'ROJA 🔴';
+                changeBullet('red', -1);
+            } else {
+                resultado = 'AZUL 🔵';
+                changeBullet('blue', -1);
+            }
+
+            alert('La siguiente bala es: ' + resultado);
+        }
+    </script>
+</body>
+</html>
